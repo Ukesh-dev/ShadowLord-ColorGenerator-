@@ -5,29 +5,40 @@ import SingleColor from './SingleColor'
 import Values from 'values.js'
 
 function App() {
- const [color, setColor] = useState('')
+  const getColors = ()=> {
+    if(sessionStorage.getItem('colors')){
+    return  sessionStorage.getItem('colors')
+    }
+    else{
+    sessionStorage.setItem('colors', "#49a6e9")
+    }
+  }
+ const [color, setColor] = useState(getColors);
  const [error, setError] = useState(false);
  const [colors, setColors] = useState([]);
  const [Alert, setAlert] = useState(false);
 
  useEffect(() => {
-  let newColors = new Values('#49a6e9').all(10);
+  let newColors = new Values(getColors()).all(10);
   console.log(newColors);
-  setColors(newColors)
-   
- }, [])
+    setColor(getColors);
+    setColors(newColors)
+    
+  }, [])
   const handleSubmit = (e)=> {
     e.preventDefault();
     
     try {
       setError(false);
+      sessionStorage.setItem('colors', color);
       let newColors = new Values(color).all(10);
       console.log(newColors);
+     
       setColors(newColors)
     } catch (error) {
       console.log(error);
       setError(true);
-      setColors([]);
+      // setColors([]);
       
     }
 
